@@ -97,15 +97,10 @@ export default function ProjectTable({
     setEditDialogOpen(true);
   };
 
-  const handleDeleteClick = async (project: Project) => {
-    setSelectedProject(project);
-
-    setDeleteDialogOpen(true);
-  };
-
+  
   const handleUpdateProject = async () => {
     if (!selectedProject || !onUpdateProject) return;
-
+    
     setIsLoading(true);
     try {
       await onUpdateProject(selectedProject.id, editData);
@@ -122,7 +117,7 @@ export default function ProjectTable({
 
   const handleMarkasFavorite = async (project: Project) => {
     if (!onMarkasFavorite) return;
-
+    
     setIsLoading(true);
     try {
       await onMarkasFavorite(project.id);
@@ -134,16 +129,25 @@ export default function ProjectTable({
       setIsLoading(false);
     }
   };
+  
+  const handleDeleteClick = async (project: Project) => {
+    setSelectedProject(project);
+
+    setDeleteDialogOpen(true);
+  };
 
   const handleDeleteProject = async () => {
+    //console.log("Deleting project:", selectedProject);
     if (!selectedProject || !onDeleteProject) return;
 
     setIsLoading(true);
+    //console.log("loading");
     try {
       await onDeleteProject(selectedProject.id);
       setDeleteDialogOpen(false);
       setSelectedProject(null);
       toast.success("Project deleted successfully");
+      console.log("Project deleted successfully");
     } catch (error) {
       toast.error("Failed to delete project");
       console.error("Error deleting project:", error);
@@ -362,7 +366,7 @@ export default function ProjectTable({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Project</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{selectedProject?.title}"? This
+              Are you sure you want to delete <span className = "text-semibold text-red-500">"{selectedProject?.title}"</span>? This
               action cannot be undone. All files and data associated with this
               project will be permanently removed.
             </AlertDialogDescription>

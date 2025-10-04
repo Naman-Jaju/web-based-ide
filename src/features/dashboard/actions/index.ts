@@ -1,4 +1,5 @@
 "use server"
+
 import { currentUser } from "@/features/auth/actions"
 import { db } from "@/lib/db"
 import { Templates } from "@prisma/client"
@@ -97,15 +98,17 @@ export const duplicateProjectById = async (id : string) => {
     }
 }
 
-export const deleteProjectById = async (id : string) => {
-    try {
-        await db.playground.delete({
-            where: { id }
-        });
-        revalidatePath('/dashboard');
-    } catch (error) {
-        console.log(error);
-    }
+export async function deleteProjectById(id: string) {
+  console.log("Deleting project with id:", id);
+  try {
+    await db.playground.delete({
+      where: { id }
+    });
+    console.log("Delete successful");
+    revalidatePath('/dashboard');
+  } catch (error) {
+    console.error("Delete error:", error);
+  }
 }
 
 
